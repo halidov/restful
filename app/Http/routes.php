@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
+
+    Route::group(['prefix'=>'admin', 'middleware' => 'is_admin' ], function () {
+
+        Route::get('/', function () {
+	        // Uses Auth Middleware
+	    });
+
+    });
 });
