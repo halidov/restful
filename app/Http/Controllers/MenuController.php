@@ -17,7 +17,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return \App\Menu::all(); 
+        return \App\Menu::orderBy('id', 'desc')->get(); 
     }
 
     /**
@@ -28,6 +28,13 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
+        $validation = \Validator::make($request->all(), [
+            'name' => 'required|min:3',
+        ]);
+
+        if($validation->fails())
+            return response($validation->errors()->all(), 400);
+
         return \App\Menu::create($request->all());
     }
 
