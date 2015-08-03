@@ -9,7 +9,6 @@ class MyAuthenticateWithBasicAuth extends \Illuminate\Auth\Middleware\Authentica
 {
     public function handle($request, Closure $next)
     {
-    	\Config::set('session.driver', 'array');
         return \Auth::onceBasic('login') ?: $next($request);
     }
 }
