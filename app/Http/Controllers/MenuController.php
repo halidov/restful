@@ -8,8 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class MenuController extends Controller
-{   
-    protected $fillable = ['name'];
+{ 
 
     /**
      * Display a listing of the resource.
@@ -38,7 +37,7 @@ class MenuController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Menu $menu)
+    public function show(\App\Menu $menu)
     {
         return $menu;
     }
@@ -50,9 +49,9 @@ class MenuController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, \App\Menu $menu)
     {  
-        $menu->update($request->all); 
+        $menu->update($request->all()); 
     }
 
     /**
@@ -61,7 +60,7 @@ class MenuController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(Menu $menu)
+    public function destroy(\App\Menu $menu)
     {
         return (string) $menu->delete();
     }
