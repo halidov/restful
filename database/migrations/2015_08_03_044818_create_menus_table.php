@@ -12,12 +12,19 @@ class CreateMenusTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('menus');
+
         Schema::create('menus', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100);
             $table->boolean('status');
+            $table->integer('admin_id')->unsigned();
             $table->timestamps();
         });
+
+        Schema::table('menus', function($table) {
+           $table->foreign('admin_id')->references('id')->on('users');
+       });
     }
 
     /**
