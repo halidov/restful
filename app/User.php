@@ -24,8 +24,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['login', 'name', 'email', 'password', 'is_waiter', 'is_client'];
 
+    public function waiters() {
+        return $this->hasMany('App\User', 'admin_id')->where('is_waiter', 1);
+    }
+
+    public function clients() {
+        return $this->hasMany('App\User', 'admin_id')->where('is_client', 1);
+    }
     /**
      * The attributes excluded from the model's JSON form.
      *

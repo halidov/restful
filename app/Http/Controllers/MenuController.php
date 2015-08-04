@@ -16,7 +16,7 @@ class MenuController extends Controller
      * @return Response
      */
     public function index()
-    {
+    {   
         return \App\Menu::orderBy('id', 'desc')->get(); 
     }
 
@@ -59,6 +59,7 @@ class MenuController extends Controller
     public function update(Request $request, \App\Menu $menu)
     {  
         $menu->update($request->all()); 
+        return $menu;
     }
 
     /**

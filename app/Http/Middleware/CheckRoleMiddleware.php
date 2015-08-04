@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class IsAdminMiddleware
+class CheckRoleMiddleware
 {
     /**
      * Handle an incoming request.
@@ -13,11 +13,11 @@ class IsAdminMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        if ( ! \Auth::user()->admin )
+        if ( ! \Auth::user()->{$role} )
         {
-            return \App::abort(401, 'You are not authorized.');
+            return \App::abort(401, 'You are not allowed to access this resource.');
         }
         return $next($request);
     }

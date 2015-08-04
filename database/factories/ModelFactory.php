@@ -15,10 +15,21 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'login' => $faker->userName,
-        'email' => $faker->email,
         'password' => bcrypt('pass'),
         'remember_token' => str_random(10),
     ];
+});
+
+$factory->defineAs(App\User::class, 'waiter', function (Faker\Generator $faker) use ($factory) {
+    $user = $factory->raw(App\User::class);
+
+    return array_merge($user, ['login'=>'waiter', 'is_waiter' => 1, 'admin_id' => 1]);
+});
+
+$factory->defineAs(App\User::class, 'client', function (Faker\Generator $faker) use ($factory) {
+    $user = $factory->raw(App\User::class);
+
+    return array_merge($user, ['login'=>'client', 'is_client' => 1, 'admin_id' => 1]);
 });
 
 $factory->defineAs(App\User::class, 'admin', function (Faker\Generator $faker) use ($factory) {

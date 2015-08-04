@@ -23,7 +23,7 @@ class CreateMenusTable extends Migration
         });
 
         Schema::table('menus', function($table) {
-           $table->foreign('admin_id')->references('id')->on('users');
+           $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
        });
     }
 

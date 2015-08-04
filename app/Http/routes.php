@@ -13,9 +13,27 @@
 
 Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
 
-    Route::group(['prefix'=>'admin', 'middleware' => 'is_admin' ], function () {
+    Route::group(['prefix'=>'admin', 'middleware' => 'check_role:admin' ], function () {
 
         Route::resource('menus', 'MenuController');
+        Route::resource('waiters', 'WaiterController');
+        Route::resource('clients', 'ClientController');
+
+    });
+
+    Route::group(['prefix'=>'waiter', 'middleware' => 'check_role:is_waiter' ], function () {
+
+        Route::get('/', function() {
+        	return ['ok'];
+        });
+
+    });
+
+    Route::group(['prefix'=>'client', 'middleware' => 'check_role:is_client' ], function () {
+
+        Route::get('/', function() {
+        	return ['ok'];
+        });
 
     });
 });
