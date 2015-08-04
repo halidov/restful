@@ -28,6 +28,8 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot($router);
         $router->model('menus', 'App\Menu');
+        $router->model('categories', 'App\Category');
+        $router->model('foods', 'App\Food');
         $router->model('waiters', 'App\User');
         $router->model('clients', 'App\User');
     }

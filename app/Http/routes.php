@@ -16,6 +16,8 @@ Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
     Route::group(['prefix'=>'admin', 'middleware' => 'check_role:admin' ], function () {
 
         Route::resource('menus', 'MenuController');
+        Route::resource('menus.categories', 'MenuCategoryController');
+        Route::resource('menus.categories.foods', 'CategoryFoodController');
         Route::resource('waiters', 'WaiterController');
         Route::resource('clients', 'ClientController');
 
@@ -31,9 +33,8 @@ Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
 
     Route::group(['prefix'=>'client', 'middleware' => 'check_role:is_client' ], function () {
 
-        Route::get('/', function() {
-        	return ['ok'];
-        });
+        Route::resource('categories', 'ClientCategoryController', ['only'=>['index']]);
+        Route::resource('categories.foods', 'ClientCategoryFoodController', ['only'=>['index']]);
 
     });
 });

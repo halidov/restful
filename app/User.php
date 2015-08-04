@@ -33,6 +33,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function clients() {
         return $this->hasMany('App\User', 'admin_id')->where('is_client', 1);
     }
+
+    public function menus() {
+        return $this->hasMany('App\Menu', 'admin_id');
+    }
+
+    public function menu() {
+        return \App\Menu::where('admin_id', \Auth::user()->admin)->where('status', 1)->get();
+    }
     /**
      * The attributes excluded from the model's JSON form.
      *

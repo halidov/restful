@@ -17,7 +17,7 @@ class MenuController extends Controller
      */
     public function index()
     {   
-        return \App\Menu::orderBy('id', 'desc')->get(); 
+        return \Auth::user()->menus()->orderBy('id', 'desc')->get(); 
     }
 
     /**
@@ -35,17 +35,8 @@ class MenuController extends Controller
         if($validation->fails())
             return response($validation->errors()->all(), 400);
 
-        return \App\Menu::create($request->all());
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show(\App\Menu $menu)
-    {
+        $menu = new \App\Menu($request->all());
+        \Auth::user()->menus()->save($menu);
         return $menu;
     }
 
@@ -58,8 +49,21 @@ class MenuController extends Controller
      */
     public function update(Request $request, \App\Menu $menu)
     {  
-        $menu->update($request->all()); 
-        return $menu;
+        $validation = \Validator::make($request->all(), [
+            'name' => 'min:3',
+        ]);
+
+        if($validation->fails())
+            return response($validation->errors()->all(), 400);
+
+        if($menu->accessable()) {
+            $input = $request->all();
+            if(!empty($input['status'])) {
+                \Auth::user()->menus()->update(['status'=>false]);
+            }
+            $menu->update($request->all()); 
+            return $menu;
+        }
     }
 
     /**
@@ -70,6 +74,8 @@ class MenuController extends Controller
      */
     public function destroy(\App\Menu $menu)
     {
-        return (string) $menu->delete();
+        if($menu->accessable()) {
+            return (string) $menu->delete();
+        }
     }
 }

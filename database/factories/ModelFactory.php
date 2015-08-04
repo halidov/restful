@@ -37,3 +37,10 @@ $factory->defineAs(App\User::class, 'admin', function (Faker\Generator $faker) u
 
     return array_merge($user, ['login' => 'admin', 'admin' => TRUE]);
 });
+
+$factory->defineAs(App\User::class, 'admin2', function (Faker\Generator $faker) use ($factory) {
+    $user = $factory->raw(App\User::class);
+
+    return array_merge($user, ['login' => 'admin2', 'admin' => TRUE]);
+});
+

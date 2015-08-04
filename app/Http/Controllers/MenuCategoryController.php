@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class ClientController extends Controller
+class MenuCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
+    public function index(\App\Menu $menu)
     {
-        return \Auth::user()->clients;
+        if($menu->accessable())
+            return $menu->categories;
     }
 
     /**
@@ -25,34 +26,19 @@ class ClientController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, \App\Menu $menu)
     {
-        $input = $request->all();
-        $input['is_client'] = true;
-
         $validation = \Validator::make($request->all(), [
             'name' => 'required|min:3',
-            'login' => 'required|min:3|unique:users',
-            'password' => 'required|min:5',
         ]);
 
         if($validation->fails())
             return response($validation->errors()->all(), 400);
 
-        $client = new \App\User($input);
+        $category = new \App\Category($request->all());
+        $menu->categories()->save($category);
 
-        return \Auth::user()->clients()->save($client);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($client)
-    {
-        //
+        return $category;
     }
 
     /**
@@ -62,22 +48,18 @@ class ClientController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, \App\User $user)
+    public function update(Request $request, \App\Menu $menu, \App\Category $category)
     {
         $validation = \Validator::make($request->all(), [
             'name' => 'min:3',
-            'login' => 'min:3|unique:users',
-            'password' => 'min:5',
         ]);
 
         if($validation->fails())
             return response($validation->errors()->all(), 400);
-            
-        if($user->is_client && $user->admin_id == \Auth::user()->id) {
 
-            $user->update($request->all());
-
-            return $user;
+        if($category->accessable($menu)) {
+            $category->update($request->all());
+            return $category;
         }
     }
 
@@ -87,10 +69,8 @@ class ClientController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(\App\User $user)
+    public function destroy($id)
     {
-        if($user->is_client && $user->admin_id == \Auth::user()->id) {
-            return (string) $user->delete();
-        }
+        //
     }
 }

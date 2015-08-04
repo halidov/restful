@@ -13,6 +13,7 @@ class UserTableSeeder extends Seeder
     {
         // Create an App\User "admin" instance...
         factory(App\User::class, 'admin')->create();
+        factory(App\User::class, 'admin2')->create();
         factory(App\User::class, 'waiter', 1)->create();
         factory(App\User::class, 'client', 1)->create();
 

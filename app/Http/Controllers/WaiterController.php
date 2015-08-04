@@ -64,15 +64,16 @@ class WaiterController extends Controller
      */
     public function update(Request $request, \App\User $user)
     {
-        if($user->is_waiter && $user->admin_id == \Auth::user()->id) {
-            $validation = \Validator::make($request->all(), [
-                'name' => 'min:3',
-                'login' => 'min:3|unique:users',
-                'password' => 'min:5',
-            ]);
+        $validation = \Validator::make($request->all(), [
+            'name' => 'min:3',
+            'login' => 'min:3|unique:users',
+            'password' => 'min:5',
+        ]);
 
-            if($validation->fails())
-                return response($validation->errors()->all(), 400);
+        if($validation->fails())
+            return response($validation->errors()->all(), 400);
+        
+        if($user->is_waiter && $user->admin_id == \Auth::user()->id) {
 
             $user->update($request->all());
 

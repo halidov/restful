@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class ClientController extends Controller
+class CategoryFoodController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
+    public function index(\App\Menu $menu, \App\Category $category)
     {
-        return \Auth::user()->clients;
+        if($category->accessable($menu))
+            return $category->foods;
     }
 
     /**
@@ -25,34 +26,22 @@ class ClientController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, \App\Menu $menu, \App\Category $category)
     {
-        $input = $request->all();
-        $input['is_client'] = true;
-
         $validation = \Validator::make($request->all(), [
             'name' => 'required|min:3',
-            'login' => 'required|min:3|unique:users',
-            'password' => 'required|min:5',
+            'price' => 'required|integer|min:1',
         ]);
 
         if($validation->fails())
             return response($validation->errors()->all(), 400);
 
-        $client = new \App\User($input);
+        if($category->accessable($menu)) {
+            $food = new \App\Food($request->all());
+            $category->foods()->save($food);
 
-        return \Auth::user()->clients()->save($client);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($client)
-    {
-        //
+            return $food;
+        }
     }
 
     /**
@@ -62,22 +51,20 @@ class ClientController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, \App\User $user)
+    public function update(Request $request, \App\Menu $menu, \App\Category $category, \App\Food $food)
     {
         $validation = \Validator::make($request->all(), [
             'name' => 'min:3',
-            'login' => 'min:3|unique:users',
-            'password' => 'min:5',
+            'price' => 'integer|min:1',
         ]);
 
         if($validation->fails())
             return response($validation->errors()->all(), 400);
-            
-        if($user->is_client && $user->admin_id == \Auth::user()->id) {
 
-            $user->update($request->all());
+        if($food->accessable($menu, $category)) {
+            $food->update($request->all());
 
-            return $user;
+            return $food;
         }
     }
 
@@ -87,10 +74,10 @@ class ClientController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy(\App\User $user)
+    public function destroy(\App\Menu $menu, \App\Category $category, \App\Food $food)
     {
-        if($user->is_client && $user->admin_id == \Auth::user()->id) {
-            return (string) $user->delete();
+        if($food->accessable($menu, $category)) {
+            return (string) $food->delete();
         }
     }
 }
