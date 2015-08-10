@@ -20,15 +20,12 @@ Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
         Route::resource('menus.categories.foods', 'CategoryFoodController');
         Route::resource('waiters', 'WaiterController');
         Route::resource('clients', 'ClientController');
+        Route::resource('waiters.clients', 'WaiterClientController', ['only'=>['index','store','destroy']]);
 
     });
 
     Route::group(['prefix'=>'waiter', 'middleware' => 'check_role:is_waiter' ], function () {
-
-        Route::get('/', function() {
-        	return ['ok'];
-        });
-
+        Route::resource('clients', 'WaiterWaiterClientController', ['only'=>['index']]);
     });
 
     Route::group(['prefix'=>'client', 'middleware' => 'check_role:is_client' ], function () {

@@ -27,10 +27,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['login', 'name', 'email', 'password', 'is_waiter', 'is_client'];
 
     public function waiters() {
+        if($this->is_client)
+            return $this->belongsToMany('App\User', 'waiter_client', 'client_id', 'waiter_id');
         return $this->hasMany('App\User', 'admin_id')->where('is_waiter', 1);
     }
 
     public function clients() {
+        if($this->is_waiter) {
+            return $this->belongsToMany('App\User', 'waiter_client', 'waiter_id', 'client_id');
+        }
         return $this->hasMany('App\User', 'admin_id')->where('is_client', 1);
     }
 
@@ -41,6 +46,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function menu() {
         return \App\Menu::where('admin_id', \Auth::user()->admin)->where('status', 1)->get();
     }
+
+    public function accessable() {
+        return $this->admin_id == \Auth::user()->id || $this->admin_id == \Auth::user()->admin_id;
+    }
+
     /**
      * The attributes excluded from the model's JSON form.
      *
