@@ -14,4 +14,12 @@ class Food extends Model
     public function accessable(\App\Menu $menu, \App\Category $category) {
     	return $category->id == $this->category_id && $category->accessable($menu);
     }
+
+    public function category() {
+    	return $this->belongsTo('App\Category');
+    }
+
+    public function orders() {
+    	return $this->hasMany('App\Order');
+    }
 }
