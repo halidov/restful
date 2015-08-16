@@ -46,10 +46,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Order', 'client_id');
     }
 
-    public function activeOrders() {
-        return $this->orders()->where('status', 0);
-    }
-
     public function menus() {
         return $this->hasMany('App\Menu', 'admin_id');
     }

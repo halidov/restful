@@ -16,17 +16,11 @@ class WaiterOrderController extends Controller
      */
     public function index()
     {
-        $me = \Auth::user()->load('clients.activeOrders');
+        $me = \Auth::user()->load('clients');
 
-        $orders = collect([]);
+        $clients = $me->clients->pluck('id');
 
-        $me->clients->each(function ($client) use($orders) {
-            foreach ($client->activeOrders as $order) {
-                $orders->push($order);
-            }
-        });
-
-        return $orders->groupBy('client_id')[3];
+        return \App\Order::whereIn('client_id', $clients)->where('status', 0)->groupBy('client_id')->orderBy('created_at')->get();
     }
 
     /**
@@ -56,20 +50,17 @@ class WaiterOrderController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(\App\Order $order)
     {
-        //
-    }
+        $me = \Auth::user();
+        $client_id = $order->client_id;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
+
+        $my_client = $me->clients->where('id', $client_id);
+
+        if(!$my_client->isEmpty()) {
+            return $order->client->orders->load('food');
+        }
     }
 
     /**
@@ -79,9 +70,32 @@ class WaiterOrderController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \App\Order $order)
     {
-        //
+        $me = \Auth::user();
+        $client_id = $order->client_id;
+
+        $my_client = $me->clients->where('id', $client_id);
+
+        if(!$my_client->isEmpty()) {
+
+            $status = $request->get('status');
+
+            $me->clients()->where('id', 1);
+            $orders = $order->client->orders();
+
+            if($status == 1) {
+                $orders->update(['status'=>$status]);
+                $order->waiter()->associate($me);
+                $order->save();
+            }
+
+            if($status == 2) {
+                $orders->update(['status'=>$status]);
+            }
+
+            return $orders->get();
+        }
     }
 
     /**

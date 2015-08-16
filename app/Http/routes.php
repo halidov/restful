@@ -26,7 +26,7 @@ Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
 
     Route::group(['prefix'=>'waiter', 'middleware' => 'check_role:is_waiter' ], function () {
         Route::resource('clients', 'WaiterWaiterClientController', ['only'=>['index']]);
-        Route::resource('orders', 'WaiterOrderController', ['only'=>['index', 'update']]);
+        Route::resource('orders', 'WaiterOrderController', ['only'=>['index', 'show', 'update']]);
     });
 
     Route::group(['prefix'=>'client', 'middleware' => 'check_role:is_client' ], function () {
