@@ -15,8 +15,8 @@ class OrderController extends Controller
      * @return Response
      */
     public function index()
-    {
-        return \Auth::user()->orders;
+    {   
+        return \Auth::user()->orders->load('items.food');
     }
 
     /**
@@ -29,18 +29,31 @@ class OrderController extends Controller
     {
         $items = $request->get('items');
         $me = \Auth::user();
+        $my_order = $me->orders->first()->toArray();
+        $order = new \App\Order;
+        $order->client()->associate($me);
+
+        if($my_order['waiter_id']) {
+            $waiter = \App\User::find($my_order['waiter_id']);
+            $order->waiter()->associate($waiter);
+        }
+        
+        $order->save();
 
         foreach ($items as $item) {
             $food = \App\Food::find($item['food']);
             if($food->category->menu->admin_id == $me->admin_id) {
-                $order = new \App\Order($item);
-                $order->food()->associate($food);
-                $order->client()->associate($me);
-                $order->save();
+                
+                $item = new \App\OrderItem($item);
+
+                $item->food()->associate($food);
+                $item->order()->associate($order);
+
+                $item->save();
             }
         }
 
-        return $me->orders;
+        return $order->load('items.food');
     }
 
     /**

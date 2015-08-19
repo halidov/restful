@@ -33,7 +33,7 @@ Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
 
         Route::resource('categories', 'ClientCategoryController', ['only'=>['index']]);
         Route::resource('categories.foods', 'ClientCategoryFoodController', ['only'=>['index']]);
-        Route::resource('orders', 'OrderController', ['except'=>['delete']]);
+        Route::resource('orders', 'OrderController', ['only'=>['index', 'store']]);
 
     });
 });
