@@ -29,13 +29,19 @@ class OrderController extends Controller
     {
         $items = $request->get('items');
         $me = \Auth::user();
-        $my_order = $me->orders->first()->toArray();
+
         $order = new \App\Order;
         $order->client()->associate($me);
 
-        if($my_order['waiter_id']) {
-            $waiter = \App\User::find($my_order['waiter_id']);
-            $order->waiter()->associate($waiter);
+        $my_orders = $me->orders;
+
+        if(!$my_orders->isEmpty()) {
+            $my_order = $my_orders->first()->toArray();
+
+            if($my_order['waiter_id']) {
+                $waiter = \App\User::find($my_order['waiter_id']);
+                $order->waiter()->associate($waiter);
+            }
         }
         
         $order->save();
