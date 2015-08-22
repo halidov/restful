@@ -16,7 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {   
-        return \Auth::user()->orders->load('items.food');
+        return \Auth::user()->orders()->where('status', '!=', 2)->orderBy('id', 'desc')->get()->load('items.food');
     }
 
     /**

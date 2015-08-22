@@ -20,7 +20,7 @@ class WaiterOrderController extends Controller
 
         $clients = $me->clients->pluck('id');
 
-        return \App\Order::whereIn('client_id', $clients)->where('waiter_id', null)->orderBy('created_at', 'desc')->get()->load('client','items.food');
+        return \App\Order::whereIn('client_id', $clients)->whereNull('waiter_id')->orderBy('id', 'desc')->get()->load('client','items.food');
     }
 
     /**
@@ -57,23 +57,18 @@ class WaiterOrderController extends Controller
         $my_client = $me->clients->where('id', $client_id);
 
         if(!$my_client->isEmpty()) {
-
             $status = $request->get('status');
 
-            $me->clients()->where('id', 1);
-            $orders = $order->client->orders();
+            $orders = $order->client->orders;
 
-            if($status == 1) {
-                $orders->update(['status'=>$status]);
-                $order->waiter()->associate($me);
-                $order->save();
+            foreach ($orders as $o) {
+                if($status == 1)
+                    $o->waiter()->associate($me);
+                $o->status = $status;
+                $o->save();
             }
 
-            if($status == 2) {
-                $orders->update(['status'=>$status]);
-            }
-
-            return $orders->get();
+            return $orders;
         }
     }
 }

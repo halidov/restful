@@ -38,6 +38,8 @@ class MenuCategoryController extends Controller
         $category = new \App\Category($request->all());
         $menu->categories()->save($category);
 
+        $category->savePhoto($request->file('photo'));
+
         return $category;
     }
 
@@ -59,6 +61,7 @@ class MenuCategoryController extends Controller
 
         if($category->accessable($menu)) {
             $category->update($request->all());
+            $category->savePhoto($request->file('photo'));
             return $category;
         }
     }

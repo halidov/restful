@@ -31,4 +31,13 @@ class Category extends Model
     public function foods() {
     	return $this->hasMany('App\Food');
     }
+
+    public function savePhoto($photo) {
+
+        if($photo) {
+            \Storage::put('photos/categories/' . $this->id . '.jpg', file_get_contents($photo->getRealPath()));
+            $this->photo = TRUE;
+            $this->save();
+        }
+    }
 }

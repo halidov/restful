@@ -71,9 +71,6 @@ class CategoryFoodController extends Controller
         }
     }
 
-    public function show(Request $request, \App\Menu $menu, \App\Category $category, \App\Food $food) {
-        return $food;
-    }
     /**
      * Remove the specified resource from storage.
      *
