@@ -20,28 +20,7 @@ class WaiterOrderController extends Controller
 
         $clients = $me->clients->pluck('id');
 
-        return \App\Order::whereIn('client_id', $clients)->where('status', 0)->groupBy('client_id')->orderBy('created_at')->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return \App\Order::whereIn('client_id', $clients)->where('waiter_id', null)->orderBy('created_at', 'desc')->get()->load('client','items.food');
     }
 
     /**
@@ -96,16 +75,5 @@ class WaiterOrderController extends Controller
 
             return $orders->get();
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

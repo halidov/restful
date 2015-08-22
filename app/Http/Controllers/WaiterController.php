@@ -41,7 +41,11 @@ class WaiterController extends Controller
 
         $waiter = new \App\User($input);
 
-        return \Auth::user()->waiters()->save($waiter);
+        \Auth::user()->waiters()->save($waiter);
+
+        $waiter->savePhoto($request->file('photo'));
+
+        return $waiter;
     }
 
     /**
@@ -76,6 +80,8 @@ class WaiterController extends Controller
         if($user->is_waiter && $user->admin_id == \Auth::user()->id) {
 
             $user->update($request->all());
+
+            $user->savePhoto($request->file('photo'));
 
             return $user;
         }

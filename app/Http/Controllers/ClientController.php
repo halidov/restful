@@ -41,7 +41,11 @@ class ClientController extends Controller
 
         $client = new \App\User($input);
 
-        return \Auth::user()->clients()->save($client);
+        \Auth::user()->clients()->save($client);
+
+        $client->savePhoto($request->file('photo'));
+
+        return $client;
     }
 
     /**
@@ -76,6 +80,8 @@ class ClientController extends Controller
         if($user->is_client && $user->admin_id == \Auth::user()->id) {
 
             $user->update($request->all());
+
+            $user->savePhoto($request->file('photo'));
 
             return $user;
         }

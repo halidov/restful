@@ -40,6 +40,7 @@ class CategoryFoodController extends Controller
             $food = new \App\Food($request->all());
             $category->foods()->save($food);
 
+            $food->savePhotos(['photos'=>$request->file('photos'), 'remove_photos'=>$request->get('remove_photos'), 'main_photo'=>$request->get('main_photo')]);
             return $food;
         }
     }
@@ -64,10 +65,15 @@ class CategoryFoodController extends Controller
         if($food->accessable($menu, $category)) {
             $food->update($request->all());
 
+            $food->savePhotos(['photos'=>$request->file('photos'), 'remove_photos'=>$request->get('remove_photos'), 'main_photo'=>$request->get('main_photo')]);
+
             return $food;
         }
     }
 
+    public function show(Request $request, \App\Menu $menu, \App\Category $category, \App\Food $food) {
+        return $food;
+    }
     /**
      * Remove the specified resource from storage.
      *

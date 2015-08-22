@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['login', 'name', 'email', 'password', 'is_waiter', 'is_client'];
+    protected $fillable = ['login', 'name', 'photo', 'email', 'password', 'is_waiter', 'is_client'];
 
     public function waiters() {
         if($this->is_client)
@@ -56,6 +56,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function accessable() {
         return $this->admin_id == \Auth::user()->id || $this->admin_id == \Auth::user()->admin_id;
+    }
+
+    public function savePhoto($photo) {
+
+        if($photo) {
+            \Storage::put('photos/users/' . $this->id . '.jpg', file_get_contents($photo->getRealPath()));
+            $this->photo = TRUE;
+            $this->save();
+        }
     }
 
     /**
