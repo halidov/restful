@@ -67,6 +67,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
+    public function notifications() {
+        return $this->hasMany('App\Notification');
+    }
+
     /**
      * The attributes excluded from the model's JSON form.
      *

@@ -35,12 +35,17 @@ class OrderController extends Controller
 
         $my_orders = $me->orders;
 
-        if(!$my_orders->isEmpty()) {
+        if($my_orders->isEmpty()) {
+            foreach ($me->waiters as $waiter) {
+                \App\Notification::add($me->toArray(), 'serve_me', $waiter);
+            }
+        } else {
             $my_order = $my_orders->first()->toArray();
 
             if($my_order['waiter_id']) {
                 $waiter = \App\User::find($my_order['waiter_id']);
                 $order->waiter()->associate($waiter);
+                \App\Notification::add($me->toArray(), 'serve_me_again', $waiter);
             }
         }
         

@@ -62,8 +62,15 @@ class WaiterOrderController extends Controller
             $orders = $order->client->orders;
 
             foreach ($orders as $o) {
-                if($status == 1)
+                if($status == 1) {
                     $o->waiter()->associate($me);
+                    \App\Notification::add($me->toArray(), 'ur_mine', $order->client);
+                    foreach ($order->client->waiters as $waiter) {
+                        if($waiter->id == $me->id)
+                            continue;
+                        \App\Notification::add($order->client->toArray(), 'hes_mine', $waiter);
+                    }
+                }
                 $o->status = $status;
                 $o->save();
             }
