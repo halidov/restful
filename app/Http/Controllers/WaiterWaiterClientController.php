@@ -18,4 +18,15 @@ class WaiterWaiterClientController extends Controller
     {
         return \Auth::user()->clients;
     }
+
+    public function update(Request $request, \App\User $client) {
+    	$me = auth()->user();
+
+    	$my_client = $me->clients->where('id', $client->id);
+
+    	if(!$my_client->isEmpty()) {
+    		if($request->get('clear'))
+    			$client->orders()->where('status', 1)->update(['status'=>2]);
+    	}
+    }
 }
