@@ -16,7 +16,16 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifs = auth()->user()->notifications()->where('status', 0)->orderBy('id', 'desc')->get();
+
+        for($i=0;$i<15;$i++) {
+            $notifs = auth()->user()->notifications()->where('status', 0)->orderBy('id', 'desc')->get();
+
+            if($notifs->isEmpty()) {
+                sleep(1);
+            } else {
+                return $notifs;
+            }
+        }
 
         return $notifs;
     }
