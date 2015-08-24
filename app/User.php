@@ -71,6 +71,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Notification');
     }
 
+    public function scopeOnline($query) {
+        return $query->where('updated_at', '>', date("Y-m-d H:i:s", strtotime('-5 minutes')));
+    }
+
     /**
      * The attributes excluded from the model's JSON form.
      *

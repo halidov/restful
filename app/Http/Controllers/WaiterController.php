@@ -16,7 +16,7 @@ class WaiterController extends Controller
      */
     public function index()
     {
-        return \Auth::user()->waiters;
+        return \Auth::user()->waiters()->online()->get();
     }
 
     /**
@@ -40,6 +40,13 @@ class WaiterController extends Controller
             return response($validation->errors()->all(), 400);
 
         $waiter = new \App\User($input);
+
+        $clients = (array) $request->get('clients');
+
+        foreach ($clients as $client) {
+           if(\App\User::find($client_id)->accessable())
+                $waiter->clients()->attach($client);
+        }
 
         \Auth::user()->waiters()->save($waiter);
 
@@ -80,6 +87,17 @@ class WaiterController extends Controller
         if($user->is_waiter && $user->admin_id == \Auth::user()->id) {
 
             $user->update($request->all());
+
+            $user->clients()->detach();
+
+            $clients = (array) $request->get('clients');
+
+            foreach ($clients as $client) {
+               if(\App\User::find($client_id)->accessable())
+                    $user->clients()->attach($client);
+            }
+
+            $user->save();
 
             $user->savePhoto($request->file('photo'));
 

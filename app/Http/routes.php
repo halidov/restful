@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix'=>'api', 'middleware' => 'auth.basic'], function () {
+Route::group(['prefix'=>'api', 'middleware' => ['auth.basic', 'online']], function () {
 
     Route::resource('notifications', 'NotificationController', ['only'=>['index', 'store']]);
 

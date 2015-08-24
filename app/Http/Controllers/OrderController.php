@@ -36,7 +36,7 @@ class OrderController extends Controller
         $my_orders = $me->orders;
 
         if($my_orders->isEmpty()) {
-            foreach ($me->waiters as $waiter) {
+            foreach ($me->waiters()->online()->get() as $waiter) {
                 \App\Notification::add($me->toArray(), 'serve_me', $waiter);
             }
         } else {
