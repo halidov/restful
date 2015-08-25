@@ -9,6 +9,7 @@ class MyAuthenticateWithBasicAuth extends \Illuminate\Auth\Middleware\Authentica
 {
     public function handle($request, Closure $next)
     {
+    	header("Access-Control-Allow-Origin: *");
         return \Auth::onceBasic('login') ?: $next($request);
     }
 }
