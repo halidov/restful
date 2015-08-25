@@ -28,4 +28,8 @@ Route::group(['prefix'=>'api', 'middleware' => ['auth.basic', 'online']], functi
         Route::resource('orders', 'OrderController', ['only'=>['index', 'store']]);
 
     });
+
+    Route::get('/', function() {
+        return auth()->user();
+    });
 });

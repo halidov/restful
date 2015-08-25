@@ -16,7 +16,7 @@ class WaiterController extends Controller
      */
     public function index()
     {
-        return \Auth::user()->waiters()->online()->get();
+        return \Auth::user()->waiters;
     }
 
     /**
