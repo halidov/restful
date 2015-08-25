@@ -33,3 +33,7 @@ Route::group(['prefix'=>'api', 'middleware' => ['auth.basic', 'online']], functi
         return auth()->user();
     });
 });
+
+Route::get('/', function() {
+    return redirect('/client');
+});
