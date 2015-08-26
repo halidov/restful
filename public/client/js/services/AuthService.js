@@ -3,11 +3,12 @@ angular.module('Restful').service('AuthService', function ($q, localStorageServi
     this.login = function(credentials) {
         var me = this;
         deferred = $q.defer();
-        Session.login(credentials, true).then(function(user) {
-            me.setToken(credentials);
+        var token = me.setToken(credentials);
+        Session.login(token, true).then(function(user) {
             return deferred.resolve(user);
         }, function(response) {
             if (response.status == 401) {
+                me.logout();
                 return deferred.reject(false);
             }
             throw new Error('No handler for status code ' + response.status);
@@ -25,13 +26,14 @@ angular.module('Restful').service('AuthService', function ($q, localStorageServi
     };
 
     this.setToken = function(credentials) {
-        localStorageService.set('token', btoa(credentials.username + ':' + credentials.password));
+        var token = btoa(credentials.username + ':' + credentials.password);
+        localStorageService.set('token', token);
+        return token;
     };
 
     this.getToken = function() {
         return localStorageService.get('token');
     };
-
 
     return this;
 });

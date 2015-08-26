@@ -38,13 +38,12 @@ angular.module('Restful', ['ngRoute', 'restangular', 'LocalStorageModule'])
 
             var deferred = $q.defer();
 
-            /*if (AuthService.isAuthenticated()) {
+            if (AuthService.isAuthenticated()) {
                 deferred.reject();
                 $location.path(route);
             } else {
                 deferred.resolve();
-            }*/
-            deferred.resolve();//temp
+            }
             return deferred.promise;
         };
     };
@@ -54,13 +53,12 @@ angular.module('Restful', ['ngRoute', 'restangular', 'LocalStorageModule'])
 
             var deferred = $q.defer();
 
-            /*if (!AuthService.isAuthenticated()) {
+            if (!AuthService.isAuthenticated()) {
                 deferred.reject();
                 $location.path(route);
             } else {
                 deferred.resolve();
-            }*/
-            deferred.resolve();//temp
+            }
             return deferred.promise;
         };
     };

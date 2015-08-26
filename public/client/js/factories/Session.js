@@ -1,11 +1,11 @@
 angular.module('Restful').factory('Session', function(Restangular) {
     var Session;
     Session = {
-        login: function(data, bypassErrorInterceptor) {
+        login: function(token, bypassErrorInterceptor) {
             return Restangular
                 .one('/')
                 .withHttpConfig({bypassErrorInterceptor: bypassErrorInterceptor})
-                .POST(data);
+                .get({}, {}, {'Authorization': 'Basic '+token});
         }
     };
     return Session;
