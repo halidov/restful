@@ -1,0 +1,9 @@
+{
+  "name": "Restful",
+  "dependencies": {
+    "angular": "latest",
+    "angular-route": "latest",
+    "restangular": "latest",
+    "moment": "latest"
+  }
+}
