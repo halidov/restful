@@ -3,17 +3,21 @@
 <head>
 	<title></title>
 	<meta charset="UTF-8">
+	<base href="/client/">
 	<link rel="stylesheet" type="text/css" href="css/app.css">
-	<base href="/Users/ramzan/Desktop/restful_client/">
 </head>
 <body>
 	<main ng-view></main>
 	<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
 	<script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+	<script type="text/javascript" src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
 	<script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
 	<script type="text/javascript" src="bower_components/restangular/dist/restangular.min.js"></script>
 	<script type="text/javascript" src="bower_components/moment/min/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/factories/Session.js"></script>
+	<script type="text/javascript" src="js/services/AuthService.js"></script>
 	<script type="text/javascript" src="js/controllers/AppCtrl.js"></script>
+	<script type="text/javascript" src="js/controllers/MainCtrl.js"></script>
 </body>
 </html>

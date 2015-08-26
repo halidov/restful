@@ -4,6 +4,7 @@
     "angular": "latest",
     "angular-route": "latest",
     "restangular": "latest",
-    "moment": "latest"
+    "moment": "latest",
+    "angular-local-storage": "latest"
   }
 }

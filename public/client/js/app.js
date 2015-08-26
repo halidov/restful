@@ -1,9 +1,9 @@
-angular.module('Restful', ['ngRoute', 'restangular'])
-.run(function ($location, Restangular/*, AuthService*/) {
+angular.module('Restful', ['ngRoute', 'restangular', 'LocalStorageModule'])
+.run(function ($location, Restangular, AuthService) {
 	Restangular.setFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
-        /*if (AuthService.isAuthenticated()) {
+        if (AuthService.isAuthenticated()) {
             headers.Authorization = 'Basic ' + AuthService.getToken();
-        }*/
+        }
         return {
             headers: headers
         };
@@ -15,8 +15,11 @@ angular.module('Restful', ['ngRoute', 'restangular'])
         } else {
             switch (response.status) {
                 case 401:
-                    //AuthService.logout();
+                    AuthService.logout();
                     $location.path('/login');
+                break;
+                default:
+                    throw new Error('No handler for status code ' + response.status);
                 break;
             }
             return false;
@@ -26,12 +29,12 @@ angular.module('Restful', ['ngRoute', 'restangular'])
 .config(function ($routeProvider, RestangularProvider, $locationProvider) {
 	RestangularProvider.setBaseUrl('http://' + location.host + '/api/');
     
-    var viewsDir = '/Users/ramzan/Desktop/restful_client/views/';
+    var viewsDir = 'views/';
     
-    $locationProvider.html5Mode(true);
+    //$locationProvider.html5Mode(true);
 
     var redirectIfAuthenticated = function (route) {
-        return function ($location, $q/*, AuthService*/) {
+        return function ($location, $q, AuthService) {
 
             var deferred = $q.defer();
 
@@ -41,13 +44,13 @@ angular.module('Restful', ['ngRoute', 'restangular'])
             } else {
                 deferred.resolve();
             }*/
-
+            deferred.resolve();//temp
             return deferred.promise;
         };
     };
 
     var redirectIfNotAuthenticated = function (route) {
-        return function ($location, $q/*, AuthService*/) {
+        return function ($location, $q, AuthService) {
 
             var deferred = $q.defer();
 
@@ -57,13 +60,13 @@ angular.module('Restful', ['ngRoute', 'restangular'])
             } else {
                 deferred.resolve();
             }*/
-
+            deferred.resolve();//temp
             return deferred.promise;
         };
     };
 
     $routeProvider
-        .when('/index.html', {
+        .when('/', {
             controller: 'MainCtrl',
             templateUrl: viewsDir + 'main.html',
             resolve: {
