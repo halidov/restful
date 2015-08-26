@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rsync -avzPc --chmod=ug=rwX --stats --delete --exclude ".*" --exclude "/storage"  --exclude "sftp-config*"  --exclude "/vendor" -e "ssh -p 4331" ./ zelim@46.101.211.84:/var/www/restful/
