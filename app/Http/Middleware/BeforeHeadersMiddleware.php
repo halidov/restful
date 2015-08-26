@@ -17,9 +17,9 @@ class BeforeHeadersMiddleware
     {
         $response = $next($request);
 
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set('Access-Control-Allow-Headers', 'Authorization');
-
+        // $response->headers->set('Access-Control-Allow-Origin', '*');
+        // $response->headers->set('Access-Control-Allow-Headers', 'Authorization');
+        $response->headers->set('WWW-Authenticate', 'Restful');
         return $response;
     }
 }
