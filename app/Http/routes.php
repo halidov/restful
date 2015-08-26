@@ -37,3 +37,7 @@ Route::group(['prefix'=>'api', 'middleware' => ['auth.basic', 'online']], functi
 Route::get('/', function() {
     return redirect('/client');
 });
+
+Route::get('/client/{path?}', function(){
+    return file_get_contents(public_path().'/client/index.html');
+})->where('path', '.+');
