@@ -31,7 +31,7 @@ angular.module('Restful', ['ngRoute', 'restangular', 'LocalStorageModule'])
     
     var viewsDir = 'views/';
     
-    //$locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true);
 
     var redirectIfAuthenticated = function (route) {
         return function ($location, $q, AuthService) {
