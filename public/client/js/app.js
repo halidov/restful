@@ -1,4 +1,4 @@
-angular.module('Restful', ['ngRoute', 'restangular', 'LocalStorageModule'])
+angular.module('Restful', ['ngRoute', 'ngAnimate', 'restangular', 'LocalStorageModule'])
 .run(function ($location, Restangular, AuthService) {
 	Restangular.setFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
         if (AuthService.isAuthenticated()) {

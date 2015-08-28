@@ -21,17 +21,17 @@ body {
 }
 
 .view-animate {
-	&.ng-enter, &.ng-leave {
-		@include transition(opacity 1.2s ease);
-		opacity: 1;
-	}
 	&.ng-enter {
+		@include transition(opacity .5s ease);
 		opacity: 0;
 		&.ng-enter-active {
 			opacity: 1;
 		}
 	}
-	&.ng-leave.ng-leave-active {
-		opacity: 0;
+	&.ng-leave {
+		opacity: 1;
+		&.ng-leave-active {
+			opacity: 0;
+		}
 	}
 }
