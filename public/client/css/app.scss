@@ -19,3 +19,19 @@ body {
 		#ffa41f 83.33333%, #ffa41f 100%
 	));
 }
+
+.view-animate {
+	&.ng-enter, &.ng-leave {
+		@include transition(opacity 1.2s ease);
+		opacity: 1;
+	}
+	&.ng-enter {
+		opacity: 0;
+		&.ng-enter-active {
+			opacity: 1;
+		}
+	}
+	&.ng-leave.ng-leave-active {
+		opacity: 0;
+	}
+}
