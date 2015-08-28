@@ -4,3 +4,4 @@ Homestead.yaml
 .env
 
 sftp-config.json
+.sass-cache

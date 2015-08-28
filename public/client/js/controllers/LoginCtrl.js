@@ -1,4 +1,4 @@
-angular.module('Restful').controller('LoginCtrl', function ($scope, $location, Session, AuthService) {
+angular.module('Restful').controller('LoginCtrl', function ($scope, $location, AuthService) {
 
     $scope.submitForm = function (isValid) {
         $scope.failedLoginAttempt = false;
@@ -9,7 +9,7 @@ angular.module('Restful').controller('LoginCtrl', function ($scope, $location, S
         }
 
         var user = {
-            username: $scope.userForm.username.$viewValue, password: $scope.userForm.password.$viewValue
+            username: $scope.loginForm.username.$viewValue, password: $scope.loginForm.password.$viewValue
         };
 
         AuthService.login(user).then(function (user) {
