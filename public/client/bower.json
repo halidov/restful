@@ -1,10 +1,10 @@
 {
   "name": "Restful",
   "dependencies": {
-    "angular": "latest",
-    "angular-route": "latest",
-    "restangular": "latest",
-    "moment": "latest",
-    "angular-local-storage": "latest"
+    "angular": "1.4.4",
+    "angular-route": "1.4.4",
+    "restangular": "1.5.1",
+    "moment": "2.10.6",
+    "angular-local-storage": "0.2.2"
   }
 }
