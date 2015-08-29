@@ -1,4 +1,4 @@
-angular.module('Restful').controller('LoginCtrl', function ($scope, $location, AuthService) {
+angular.module('Restful').controller('LoginCtrl', function ($scope, $state, AuthService) {
 
     $scope.submitForm = function (isValid) {
         $scope.failedLoginAttempt = false;
@@ -13,7 +13,7 @@ angular.module('Restful').controller('LoginCtrl', function ($scope, $location, A
         };
 
         AuthService.login(user).then(function (user) {
-            $location.path('/');
+            $state.go('main');
         }, function (response) {
             $scope.failedLoginAttempt = true;
         });
