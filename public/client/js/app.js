@@ -1,4 +1,4 @@
-angular.module('Restful', ['ngRoute', 'ngAnimate', 'restangular', 'LocalStorageModule'])
+angular.module('Restful', ['ui.router', 'ngAnimate', 'restangular', 'LocalStorageModule'])
 .run(function ($location, Restangular, AuthService) {
 	Restangular.setFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
         if (AuthService.isAuthenticated()) {
@@ -26,7 +26,7 @@ angular.module('Restful', ['ngRoute', 'ngAnimate', 'restangular', 'LocalStorageM
         }
     });
 })
-.config(function ($routeProvider, RestangularProvider, $locationProvider) {
+.config(function ($stateProvider, $urlRouterProvider, RestangularProvider, $locationProvider) {
 	RestangularProvider.setBaseUrl('http://' + location.host + '/api/');
     
     var viewsDir = 'views/';
@@ -35,50 +35,52 @@ angular.module('Restful', ['ngRoute', 'ngAnimate', 'restangular', 'LocalStorageM
 
     var redirectIfAuthenticated = function (route) {
         return function ($location, $q, AuthService) {
-
-            var deferred = $q.defer();
-
-            if (AuthService.isAuthenticated()) {
-                deferred.reject();
+            debugger
+            if(AuthService.isAuthenticated())
                 $location.path(route);
-            } else {
-                deferred.resolve();
-            }
-            return deferred.promise;
-        };
+        }
     };
 
     var redirectIfNotAuthenticated = function (route) {
         return function ($location, $q, AuthService) {
-
-            var deferred = $q.defer();
-
-            if (!AuthService.isAuthenticated()) {
-                deferred.reject();
+            if(!AuthService.isAuthenticated())
                 $location.path(route);
-            } else {
-                deferred.resolve();
-            }
-            return deferred.promise;
-        };
+        }
     };
 
-    $routeProvider
-        .when('/', {
+    $urlRouterProvider.otherwise('/');
+    
+    $stateProvider
+        .state('main', {
+            url: '/',
             controller: 'MainCtrl',
             templateUrl: viewsDir + 'main.html',
             resolve: {
                 redirectIfNotAuthenticated: redirectIfNotAuthenticated('/login')
             }
         })
-        .when('/login', {
+        .state('main.sub1', {
+            url: 'sub1',
+            controller: 'MainCtrl',
+            templateUrl: viewsDir + 'main.html',
+            resolve: {
+                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/login')
+            }
+        })
+        .state('main.sub2', {
+            url: 'sub2',
+            controller: 'MainCtrl',
+            templateUrl: viewsDir + 'main.html',
+            resolve: {
+                redirectIfNotAuthenticated: redirectIfNotAuthenticated('/login')
+            }
+        })
+        .state('login', {
+            url: '/login',
             controller: 'LoginCtrl',
             templateUrl: viewsDir + 'login.html',
             resolve: {
                 redirectIfAuthenticated: redirectIfAuthenticated('/')
             }
-        })
-        .otherwise({
-            redirectTo: '/'
         });
 });
